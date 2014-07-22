@@ -1,0 +1,30 @@
+{
+  "name": "geojson-cover",
+  "version": "0.0.0",
+  "description": "generates an s2 cover from geojson",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morganherlocker/geojson-cover.git"
+  },
+  "keywords": [
+    "s2",
+    "node-s2",
+    "cover",
+    "geojson"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/morganherlocker/geojson-cover/issues"
+  },
+  "homepage": "https://github.com/morganherlocker/geojson-cover",
+  "dependencies": {
+    "geojson-extent": "^0.2.0",
+    "geojson-normalize": "0.0.0",
+    "s2": "^0.3.4"
+  }
+}
