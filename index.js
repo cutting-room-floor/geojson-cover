@@ -5,11 +5,6 @@ var s2 = require('s2'),
 
 var serialization = 'toToken';
 
-module.exports.constants = function(_constants) {
-    if (!arguments.length) return constants;
-    constants = _constants;
-};
-
 module.exports.bboxQueryIndexes = function(bbox) {
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
@@ -17,15 +12,11 @@ module.exports.bboxQueryIndexes = function(bbox) {
 
     var cover_options = {
         min: constants.QUERY_MIN_LEVEL,
-        max: constants.QUERY_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS
+        max: constants.QUERY_MIN_LEVEL
     };
 
     return s2.getCover(latLngRect, cover_options).map(function(cell) {
-        return [
-            cell.id().rangeMin().toToken(),
-            cell.id().rangeMax().toToken()
-        ];
+        return cell.id().toToken();
     });
 };
 
@@ -36,8 +27,7 @@ module.exports.bboxCellGeoJSON = function(bbox) {
 
     var cover_options = {
         min: constants.QUERY_MIN_LEVEL,
-        max: constants.QUERY_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS
+        max: constants.QUERY_MIN_LEVEL
     };
     return s2.getCover(latLngRect, cover_options).map(function(c) {
         return c.toGeoJSON();
@@ -71,8 +61,7 @@ function polygonIndex(geometry) {
 
     var cover_options = {
         min: constants.INDEX_MIN_LEVEL,
-        max: constants.INDEX_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS,
+        max: constants.INDEX_MIN_LEVEL,
         type: 'polygon'
     };
 

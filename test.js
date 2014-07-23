@@ -1,12 +1,6 @@
 var test = require('tape'),
     geojsonCover = require('./');
 
-test('constants', function(t) {
-    t.ok(geojsonCover.constants(), 'constants()');
-    t.equal(geojsonCover.constants().QUERY_MAX_LEVEL, 8);
-    t.end();
-});
-
 test('point', function(t) {
 
 	t.end()
