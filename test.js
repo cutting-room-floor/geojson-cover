@@ -1,41 +1,41 @@
 var test = require('tape');
 
-test('point', function(t){
+test('point', function(t) {
 
 	t.end()
 })
 
-test('linestring', function(t){
+test('linestring', function(t) {
 
 	t.end()
 })
 
-test('polygon', function(t){
+test('polygon', function(t) {
 
 	t.end()
 })
 
-test('multipoint', function(t){
+test('multipoint', function(t) {
 
 	t.end()
 })
 
-test('multilinestring', function(t){
+test('multilinestring', function(t) {
 
 	t.end()
 })
 
-test('multipolygon', function(t){
+test('multipolygon', function(t) {
 
 	t.end()
 })
 
-test('feature', function(t){
+test('feature', function(t) {
 
 	t.end()
 })
 
-test('featurecollection', function(t){
+test('featurecollection', function(t) {
 
 	t.end()
 })

@@ -34,7 +34,7 @@ module.exports.bboxCellGeoJSON = function(bbox) {
         max: constants.QUERY_MAX_LEVEL,
         max_cells: constants.MAX_INDEX_CELLS
     };
-    return s2.getCover(latLngRect, cover_options).map(function(c){
+    return s2.getCover(latLngRect, cover_options).map(function(c) {
         return c.toGeoJSON();
     });
 };
