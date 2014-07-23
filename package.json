@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/morganherlocker/geojson-cover.git"
+    "url": "https://github.com/mapbox/geojson-cover.git"
   },
   "keywords": [
     "s2",
@@ -19,9 +19,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/morganherlocker/geojson-cover/issues"
+    "url": "https://github.com/mapbox/geojson-cover/issues"
   },
-  "homepage": "https://github.com/morganherlocker/geojson-cover",
+  "homepage": "https://github.com/mapbox/geojson-cover",
   "dependencies": {
     "geojson-extent": "^0.2.0",
     "geojson-normalize": "0.0.0",
