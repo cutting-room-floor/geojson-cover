@@ -5,6 +5,11 @@ var s2 = require('s2'),
 
 var serialization = 'toToken';
 
+module.exports.constants = function(_constants) {
+    if (!arguments.length) return constants;
+    constants = _constants;
+};
+
 module.exports.bboxQueryIndexes = function(bbox) {
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
