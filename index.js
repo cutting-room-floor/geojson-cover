@@ -5,14 +5,16 @@ var s2 = require('s2'),
 
 var serialization = 'toToken';
 
+constants.INDEX_MAX_LEVEL = 8;
+
 module.exports.bboxQueryIndexes = function(bbox) {
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
         new s2.S2LatLng(bbox[3], bbox[2]));
 
     var cover_options = {
-        min: constants.QUERY_MIN_LEVEL,
-        max: constants.QUERY_MIN_LEVEL
+        min: constants.INDEX_MAX_LEVEL,
+        max: constants.INDEX_MAX_LEVEL
     };
 
     return s2.getCover(latLngRect, cover_options).map(function(cell) {
@@ -26,8 +28,8 @@ module.exports.bboxCellGeoJSON = function(bbox) {
         new s2.S2LatLng(bbox[3], bbox[2]));
 
     var cover_options = {
-        min: constants.QUERY_MIN_LEVEL,
-        max: constants.QUERY_MIN_LEVEL
+        min: constants.INDEX_MAX_LEVEL,
+        max: constants.INDEX_MAX_LEVEL
     };
     return s2.getCover(latLngRect, cover_options).map(function(c) {
         return c.toGeoJSON();
@@ -48,7 +50,7 @@ module.exports.geometry = function(input) {
 
 function pointIndex(coords) {
     var id = new s2.S2CellId(new s2.S2LatLng(coords[1], coords[0]));
-    return [id.parent(constants.INDEX_POINT_LEVEL).toToken()];
+    return [id.parent(constants.INDEX_MAX_LEVEL).toToken()];
 }
 
 function lineIndex(coords) {
@@ -60,8 +62,8 @@ function polygonIndex(geometry) {
     var coords = geometry.coordinates;
 
     var cover_options = {
-        min: constants.INDEX_MIN_LEVEL,
-        max: constants.INDEX_MIN_LEVEL,
+        min: constants.INDEX_MAX_LEVEL,
+        max: constants.INDEX_MAX_LEVEL,
         type: 'polygon'
     };
 
