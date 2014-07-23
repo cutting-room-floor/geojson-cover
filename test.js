@@ -8,7 +8,21 @@ test('constants', function(t) {
 });
 
 test('point', function(t) {
+	var pt = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -93.416748046875,
+          41.37680856570233
+        ]
+      }
+    };
 
+    t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
+	t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
+	t.ok(geojsonCover.geometry(pt), 'pt geometry');
 	t.end()
 })
 
