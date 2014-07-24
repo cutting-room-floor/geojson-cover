@@ -81,8 +81,8 @@ function polygonIndex(geometry) {
         return ring.map(function(c){
             var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
             return latLng.toPoint();
-        }).slice(1)
-    })
+        }).slice(1);
+    });
 
     return s2.getCover(llRings, cover_options).map(function(cell) {
         return cell.id().toToken();
