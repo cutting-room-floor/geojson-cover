@@ -27,7 +27,35 @@ test('point', function(t) {
 })
 
 test('linestring', function(t) {
+	var line = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -49.251708984375,
+            -17.214264312027566
+          ],
+          [
+            -46.131591796875,
+            -14.381476281951612
+          ],
+          [
+            -41.77001953125,
+            -18.79191774423444
+          ],
+          [
+            -41.51733398437499,
+            -15.231189704767242
+          ]
+        ]
+      }
+    };
 
+    t.ok(geojsonCover.bboxQueryIndexes(line), 'linestring indexes'); // -> cells
+	t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
+	t.ok(geojsonCover.geometry(line), 'linestring geometry');
 	t.end()
 })
 
