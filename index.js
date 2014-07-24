@@ -61,6 +61,8 @@ module.exports.geometryGeoJSON = function(input) {
     switch (geom.type) {
         case 'Point':
             return pointGeoJSON(geom.coordinates);
+        //case 'LineString':
+        //    return linestringGeoJSON(geom)
         case 'Polygon':
             return polygonGeoJSON(geom);
         default:
