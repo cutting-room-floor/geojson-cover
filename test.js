@@ -56,6 +56,7 @@ test('linestring', function(t) {
     t.ok(geojsonCover.bboxQueryIndexes(line), 'linestring indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
 	t.ok(geojsonCover.geometryIndexes(line), 'linestring geometry');
+	//require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(poly)));
 	t.end();
 });
 
@@ -91,7 +92,8 @@ test('polygon', function(t) {
 	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
 	t.ok(geojsonCover.geometryIndexes(poly), 'polygon geometry'); 
-	//require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(poly)));
+	t.ok(geojsonCover.geometryGeoJSON(poly), 'polygon geojson');
+	t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
 	t.end();
 });
 
@@ -150,9 +152,10 @@ test('polygon with hole', function(t) {
       }
     };
 
-	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
-	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
-	t.ok(geojsonCover.geometryIndexes(poly), 'polygon geometry'); 
-	require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(poly)));
+	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon w/ hole indexes'); // -> cells
+	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon w/ hole geojson'); // -> geojson
+	t.ok(geojsonCover.geometryIndexes(poly), 'polygon w/ hole indexes'); 
+	t.ok(geojsonCover.geometryGeoJSON(poly), 'polygon w/ hole geojson');
+	t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
 	t.end();
 });
