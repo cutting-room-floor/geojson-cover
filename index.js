@@ -67,7 +67,7 @@ function lineIndex(coords) {
 
 function polygonIndex(geometry) {
 
-    var coords = geometry.coordinates;
+    var rings = geometry.coordinates;
 
     var cover_options = {
         min: constants.INDEX_MIN_LEVEL,
@@ -77,10 +77,14 @@ function polygonIndex(geometry) {
     };
 
     // GeoJSON
-    return s2.getCover([coords[0].slice(1).map(function(c) {
-        var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
-        return latLng.toPoint();
-    })], cover_options).map(function(cell) {
+    var llRings = rings.map(function(ring){
+        return ring.map(function(c){
+            var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
+            return latLng.toPoint();
+        }).slice(1)
+    })
+
+    return s2.getCover(llRings, cover_options).map(function(cell) {
         return cell.id().toToken();
     });
 }
