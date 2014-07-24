@@ -23,8 +23,8 @@ test('point', function(t) {
     t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
 	t.ok(geojsonCover.geometry(pt), 'point geometry');
-	t.end()
-})
+	t.end();
+});
 
 test('linestring', function(t) {
 	var line = {
@@ -56,8 +56,8 @@ test('linestring', function(t) {
     t.ok(geojsonCover.bboxQueryIndexes(line), 'linestring indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
 	t.ok(geojsonCover.geometry(line), 'linestring geometry');
-	t.end()
-})
+	t.end();
+});
 
 test('polygon', function(t) {
 	var poly = {
@@ -91,30 +91,5 @@ test('polygon', function(t) {
 	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
 	t.ok(geojsonCover.geometry(poly), 'polygon geometry'); 
-	t.end()
-})
-
-test('multipoint', function(t) {
-
-	t.end()
-})
-
-test('multilinestring', function(t) {
-
-	t.end()
-})
-
-test('multipolygon', function(t) {
-
-	t.end()
-})
-
-test('feature', function(t) {
-
-	t.end()
-})
-
-test('featurecollection', function(t) {
-
-	t.end()
-})
+	t.end();
+});
