@@ -77,10 +77,10 @@ function polygonIndex(geometry) {
     };
 
     // GeoJSON
-    return s2.getCover(coords[0].slice(1).map(function(c) {
+    return s2.getCover([coords[0].slice(1).map(function(c) {
         var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
         return latLng.toPoint();
-    }), cover_options).map(function(cell) {
+    })], cover_options).map(function(cell) {
         return cell.id().toToken();
     });
 }

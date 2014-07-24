@@ -22,7 +22,7 @@ test('point', function(t) {
 
     t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
-	t.ok(geojsonCover.geometry(pt), 'pt geometry');
+	t.ok(geojsonCover.geometry(pt), 'point geometry');
 	t.end()
 })
 
@@ -32,7 +32,37 @@ test('linestring', function(t) {
 })
 
 test('polygon', function(t) {
+	var poly = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -93.328857421875,
+              41.65649719441145
+            ],
+            [
+              -96.712646484375,
+              40.83043687764923
+            ],
+            [
+              -95.108642578125,
+              39.90130858574735
+            ],
+            [
+              -93.328857421875,
+              41.65649719441145
+            ]
+          ]
+        ]
+      }
+    };
 
+	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
+	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
+	t.ok(geojsonCover.geometry(poly), 'polygon geometry'); 
 	t.end()
 })
 
