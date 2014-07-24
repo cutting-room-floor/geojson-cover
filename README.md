@@ -9,5 +9,6 @@ generates an s2 cover from geojson
 ```js
 geojsonCover.bboxQueryIndexes(bbox); // -> cells
 geojsonCover.bboxCellGeoJSON(bbox); // -> geojson
-geojsonCover.geometry(input); // -> cells
+geojsonCover.geometryIndexes(input); // -> cells
+geojsonCover.geometryGeoJSON(input); // -> geojson
 ```
