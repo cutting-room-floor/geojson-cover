@@ -1,6 +1,6 @@
 {
   "name": "geojson-cover",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "generates an s2 cover from geojson",
   "main": "index.js",
   "scripts": {
