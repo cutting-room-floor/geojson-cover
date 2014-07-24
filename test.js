@@ -56,7 +56,8 @@ test('linestring', function(t) {
     t.ok(geojsonCover.bboxQueryIndexes(line), 'linestring indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
 	t.ok(geojsonCover.geometryIndexes(line), 'linestring geometry');
-	//require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(poly)));
+	console.log(geojsonCover.geometryIndexes(line))
+	require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(line)));
 	t.end();
 });
 
