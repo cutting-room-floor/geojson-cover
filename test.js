@@ -22,7 +22,7 @@ test('point', function(t) {
 
     t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
-	t.ok(geojsonCover.geometry(pt), 'point geometry');
+	t.ok(geojsonCover.geometryIndexes(pt), 'point geometry');
 	t.end();
 });
 
@@ -55,7 +55,7 @@ test('linestring', function(t) {
 
     t.ok(geojsonCover.bboxQueryIndexes(line), 'linestring indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
-	t.ok(geojsonCover.geometry(line), 'linestring geometry');
+	t.ok(geojsonCover.geometryIndexes(line), 'linestring geometry');
 	t.end();
 });
 
@@ -90,6 +90,69 @@ test('polygon', function(t) {
 
 	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
-	t.ok(geojsonCover.geometry(poly), 'polygon geometry'); 
+	t.ok(geojsonCover.geometryIndexes(poly), 'polygon geometry'); 
+	//require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(poly)));
+	t.end();
+});
+
+test('polygon with hole', function(t) {
+	var poly = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [ 
+          [    // outer ring
+            [
+              -49.295654296875,
+              -20.055931265194438
+            ],
+            [
+              -49.295654296875,
+              -13.27202630119995
+            ],
+            [
+              -41.1328125,
+              -13.27202630119995
+            ],
+            [
+              -41.1328125,
+              -20.055931265194438
+            ],
+            [
+              -49.295654296875,
+              -20.055931265194438
+            ]
+          ],
+          [    // inner ring
+            [
+              -47.076416015625,
+              -18.79191774423444
+            ],
+            [
+              -47.076416015625,
+              -16.309595517742185
+            ],
+            [
+              -44.615478515625,
+              -16.309595517742185
+            ],
+            [
+              -44.615478515625,
+              -18.79191774423444
+            ],
+            [
+              -47.076416015625,
+              -18.79191774423444
+            ]
+          ]
+        ]
+      }
+    };
+
+	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
+	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
+	t.ok(geojsonCover.geometryIndexes(poly), 'polygon geometry'); 
+	require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(poly)));
 	t.end();
 });
