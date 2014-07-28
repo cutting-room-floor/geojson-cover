@@ -80,7 +80,6 @@ function lineIndex(coords) {
 }
 
 function polygonIndex(geometry) {
-
     var rings = geometry.coordinates;
 
     var cover_options = {

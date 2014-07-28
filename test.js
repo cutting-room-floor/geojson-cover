@@ -159,3 +159,40 @@ test('polygon with hole', function(t) {
 	t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
 	t.end();
 });
+
+test('multipolygon', function(t) {
+  var poly = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "multipolygon",
+        "coordinates": [
+          [
+            [
+              -93.328857421875,
+              41.65649719441145
+            ],
+            [
+              -96.712646484375,
+              40.83043687764923
+            ],
+            [
+              -95.108642578125,
+              39.90130858574735
+            ],
+            [
+              -93.328857421875,
+              41.65649719441145
+            ]
+          ]
+        ]
+      }
+    };
+
+  t.ok(geojsonCover.bboxQueryIndexes(poly), 'multipolygon indexes'); // -> cells
+  t.ok(geojsonCover.bboxCellGeoJSON(poly), 'multipolygon geojson'); // -> geojson
+  t.ok(geojsonCover.geometryIndexes(poly).length, 'multipolygon geometry'); 
+  t.ok(geojsonCover.geometryGeoJSON(poly), 'multipolygon geojson');
+  t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
+  t.end();
+});
