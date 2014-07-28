@@ -51,6 +51,8 @@ module.exports.geometryIndexes = function(input) {
             return pointIndex(geom.coordinates);
         case 'Polygon':
             return polygonIndex(geom);
+        case 'MultiPolygon':
+            return multipolygonIndex(geom);
         default:
             return [];
     }
@@ -65,6 +67,8 @@ module.exports.geometryGeoJSON = function(input) {
         //    return linestringGeoJSON(geom)
         case 'Polygon':
             return polygonGeoJSON(geom);
+        case 'MultiPolygon':
+            return multipolygonGeoJSON(geom);
         default:
             return [];
     }
@@ -95,6 +99,31 @@ function polygonIndex(geometry) {
             var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
             return latLng.toPoint();
         }).slice(1);
+    });
+
+    return s2.getCover(llRings, cover_options).map(function(cell) {
+        return cell.id().toToken();
+    });
+}
+
+function multipolygonIndex(geometry) {
+    var polygons = geometry.coordinates;
+
+    var cover_options = {
+        min: constants.INDEX_MIN_LEVEL,
+        max: constants.INDEX_MAX_LEVEL,
+        max_cells: constants.MAX_INDEX_CELLS,
+        type: 'multipolygon'
+    };
+
+    // GeoJSON
+    var llRings = polygons.map(function(rings){
+        return rings.map(function(ring){
+            return ring.map(function(c){
+                var latLng = (new s2.S2LatLng(c[1], c[0])).normalized(); 
+                return latLng.toPoint();
+            }).slice(1);
+        });
     });
 
     return s2.getCover(llRings, cover_options).map(function(cell) {
@@ -133,6 +162,41 @@ function polygonGeoJSON(geometry) {
         features: features
     }
 }
+
+function multipolygonGeoJSON(geometry) {
+    var polygons = geometry.coordinates;
+
+    var cover_options = {
+        min: constants.INDEX_MIN_LEVEL,
+        max: constants.INDEX_MAX_LEVEL,
+        max_cells: constants.MAX_INDEX_CELLS,
+        type: 'multipolygon'
+    };
+
+    // GeoJSON
+    var llRings = polygons.map(function(rings){
+        return rings.map(function(ring){
+            return ring.map(function(c){
+                var latLng = (new s2.S2LatLng(c[1], c[0])).normalized(); 
+                return latLng.toPoint();
+            }).slice(1);
+        });
+    });
+    var features = s2.getCover(llRings, cover_options).map(function(cell,i) {
+        var geojson = cell.toGeoJSON();
+        return {
+            type: 'Feature',
+            geometry: geojson,
+            properties: {}
+        };
+    });
+
+    return {
+        type: 'FeatureCollection',
+        features: features
+    }
+}
+
 
 function linestringGeoJSON(geometry) {
     var rings = geometry.coordinates;

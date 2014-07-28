@@ -20,7 +20,7 @@ test('point', function(t) {
       }
     };
 
-    t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
+  t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
 	t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
 	t.ok(geojsonCover.geometryIndexes(pt).length, 'point geometry');
 	t.end();
@@ -164,30 +164,14 @@ test('multipolygon', function(t) {
   var poly = {
       "type": "Feature",
       "properties": {},
-      "geometry": {
-        "type": "multipolygon",
-        "coordinates": [
-          [
-            [
-              -93.328857421875,
-              41.65649719441145
-            ],
-            [
-              -96.712646484375,
-              40.83043687764923
-            ],
-            [
-              -95.108642578125,
-              39.90130858574735
-            ],
-            [
-              -93.328857421875,
-              41.65649719441145
-            ]
-          ]
-        ]
-      }
-    };
+      "geometry": { "type": "MultiPolygon",
+    "coordinates": [
+      [[[102.0, 2.0], [103.0, 2.0], [103.0, 3.0], [102.0, 3.0], [102.0, 2.0]]],
+      [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]],
+       [[100.2, 0.2], [100.8, 0.2], [100.8, 0.8], [100.2, 0.8], [100.2, 0.2]]]
+      ]
+    }
+  };
 
   t.ok(geojsonCover.bboxQueryIndexes(poly), 'multipolygon indexes'); // -> cells
   t.ok(geojsonCover.bboxCellGeoJSON(poly), 'multipolygon geojson'); // -> geojson

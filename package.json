@@ -25,7 +25,7 @@
   "dependencies": {
     "geojson-extent": "^0.2.0",
     "geojson-normalize": "0.0.0",
-    "s2": "^0.3.7"
+    "s2": "^0.3.8"
   },
   "devDependencies": {
     "tape": "^2.13.4"
