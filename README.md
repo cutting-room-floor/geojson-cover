@@ -7,13 +7,13 @@ generates an s2 cover from geojson
 ## API
 
 ```js
-geojsonCover.bboxQueryIndexes(bbox); // -> cells
+geojsonCover.bboxQueryIndexes(bbox, range); // -> cells
 geojsonCover.bboxCellGeoJSON(bbox); // -> geojson
 geojsonCover.geometryIndexes(geojson); // -> cells
 geojsonCover.geometryGeoJSON(geojson); // -> geojson
 
 // options
-geojsonCover.bboxQueryIndexes(bbox, {max_index_cells: 50}); // -> cells
+geojsonCover.bboxQueryIndexes(bbox, false, {max_index_cells: 50}); // -> cells
 ```
 
 ###options
