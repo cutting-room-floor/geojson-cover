@@ -10,7 +10,8 @@ module.exports.constants = function(_constants) {
     constants = _constants;
 };
 
-module.exports.bboxQueryIndexes = function(bbox) {
+module.exports.bboxQueryIndexes = function(bbox, range) {
+    if(range === undefined) range = true;
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
         new s2.S2LatLng(bbox[3], bbox[2]));
@@ -22,10 +23,14 @@ module.exports.bboxQueryIndexes = function(bbox) {
     };
 
     return s2.getCover(latLngRect, cover_options).map(function(cell) {
-        return [
-            cell.id().rangeMin().toToken(),
-            cell.id().rangeMax().toToken()
-        ];
+        if(range){
+            return [
+                cell.id().rangeMin().toToken(),
+                cell.id().rangeMax().toToken()
+            ];
+        } else {
+            return cell.id().toToken();
+        }
     });
 };
 
@@ -120,7 +125,7 @@ function multipolygonIndex(geometry) {
     var llRings = polygons.map(function(rings){
         return rings.map(function(ring){
             return ring.map(function(c){
-                var latLng = (new s2.S2LatLng(c[1], c[0])).normalized(); 
+                var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
                 return latLng.toPoint();
             }).slice(1);
         });
@@ -177,7 +182,7 @@ function multipolygonGeoJSON(geometry) {
     var llRings = polygons.map(function(rings){
         return rings.map(function(ring){
             return ring.map(function(c){
-                var latLng = (new s2.S2LatLng(c[1], c[0])).normalized(); 
+                var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
                 return latLng.toPoint();
             }).slice(1);
         });
