@@ -2,12 +2,6 @@ var test = require('tape'),
     extent = require('geojson-extent'),
     geojsonCover = require('./');
 
-test('constants', function(t) {
-    t.ok(geojsonCover.constants(), 'constants()');
-    t.equal(geojsonCover.constants().QUERY_MAX_LEVEL, 8);
-    t.end();
-});
-
 test('bbox', function(t){
   var bbox = [0,0,1,1];
 

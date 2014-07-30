@@ -1,25 +1,20 @@
 var s2 = require('s2'),
     normalize = require('geojson-normalize'),
-    geojsonExtent = require('geojson-extent'),
-    constants = require('./constants');
+    geojsonExtent = require('geojson-extent');
 
 var serialization = 'toToken';
 
-module.exports.constants = function(_constants) {
-    if (!arguments.length) return constants;
-    constants = _constants;
-};
-
-module.exports.bboxQueryIndexes = function(bbox, range) {
+module.exports.bboxQueryIndexes = function(bbox, range, opts) {
+    opts = setOptions(opts);
     if(range === undefined) range = true;
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
         new s2.S2LatLng(bbox[3], bbox[2]));
 
     var cover_options = {
-        min: constants.QUERY_MIN_LEVEL,
-        max: constants.QUERY_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS
+        min: opts.query_min_level,
+        max: opts.query_max_level,
+        max_cells: opts.max_index_cells
     };
 
     return s2.getCover(latLngRect, cover_options).map(function(cell) {
@@ -34,46 +29,47 @@ module.exports.bboxQueryIndexes = function(bbox, range) {
     });
 };
 
-module.exports.bboxCellGeoJSON = function(bbox) {
+module.exports.bboxCellGeoJSON = function(bbox, opts) {
+    opts = setOptions(opts);
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
         new s2.S2LatLng(bbox[3], bbox[2]));
 
     var cover_options = {
-        min: constants.QUERY_MIN_LEVEL,
-        max: constants.QUERY_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS
+        min: opts.query_min_level,
+        max: opts.query_max_level,
+        max_cells: opts.max_index_cells
     };
     return s2.getCover(latLngRect, cover_options).map(function(c) {
         return c.toGeoJSON();
     });
 };
 
-module.exports.geometryIndexes = function(input) {
+module.exports.geometryIndexes = function(input, opts) {
+    opts = setOptions(opts);
     var geom = normalize(input).features[0].geometry;
     switch (geom.type) {
         case 'Point':
-            return pointIndex(geom.coordinates);
+            return pointIndex(geom.coordinates, opts);
         case 'Polygon':
-            return polygonIndex(geom);
+            return polygonIndex(geom, opts);
         case 'MultiPolygon':
-            return multipolygonIndex(geom);
+            return multipolygonIndex(geom, opts);
         default:
             return [];
     }
 };
 
-module.exports.geometryGeoJSON = function(input) {
+module.exports.geometryGeoJSON = function(input, opts) {
+    opts = setOptions(opts);
     var geom = normalize(input).features[0].geometry;
     switch (geom.type) {
         case 'Point':
-            return pointGeoJSON(geom.coordinates);
-        //case 'LineString':
-        //    return linestringGeoJSON(geom)
+            return pointGeoJSON(geom.coordinates, opts);
         case 'Polygon':
-            return polygonGeoJSON(geom);
+            return polygonGeoJSON(geom, opts);
         case 'MultiPolygon':
-            return multipolygonGeoJSON(geom);
+            return multipolygonGeoJSON(geom, opts);
         default:
             return [];
     }
@@ -81,22 +77,22 @@ module.exports.geometryGeoJSON = function(input) {
 
 // GeometryIndex
 
-function pointIndex(coords) {
+function pointIndex(coords, opts) {
     var id = new s2.S2CellId(new s2.S2LatLng(coords[1], coords[0]));
-    return [id.parent(constants.INDEX_POINT_LEVEL).toToken()];
+    return [id.parent(opts.index_point_level).toToken()];
 }
 
-function lineIndex(coords) {
+function lineIndex(coords, opts) {
     return polygonIndex(geojsonExtent.polygon(geometry));
 }
 
-function polygonIndex(geometry) {
+function polygonIndex(geometry, opts) {
     var rings = geometry.coordinates;
 
     var cover_options = {
-        min: constants.INDEX_MIN_LEVEL,
-        max: constants.INDEX_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS,
+        min: opts.index_min_level,
+        max: opts.index_max_level,
+        max_cells: opts.max_index_cells,
         type: 'polygon'
     };
 
@@ -112,13 +108,13 @@ function polygonIndex(geometry) {
     });
 }
 
-function multipolygonIndex(geometry) {
+function multipolygonIndex(geometry, opts) {
     var polygons = geometry.coordinates;
 
     var cover_options = {
-        min: constants.INDEX_MIN_LEVEL,
-        max: constants.INDEX_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS,
+        min: opts.index_min_level,
+        max: opts.index_max_level,
+        max_cells: opts.max_index_cells,
         type: 'multipolygon'
     };
 
@@ -138,13 +134,13 @@ function multipolygonIndex(geometry) {
 
 // GeometryGeoJSON
 
-function polygonGeoJSON(geometry) {
+function polygonGeoJSON(geometry, opts) {
     var rings = geometry.coordinates;
 
     var cover_options = {
-        min: constants.INDEX_MIN_LEVEL,
-        max: constants.INDEX_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS,
+        min: opts.index_min_level,
+        max: opts.index_max_level,
+        max_cells: opts.max_index_cells,
         type: 'polygon'
     };
 
@@ -169,13 +165,13 @@ function polygonGeoJSON(geometry) {
     }
 }
 
-function multipolygonGeoJSON(geometry) {
+function multipolygonGeoJSON(geometry, opts) {
     var polygons = geometry.coordinates;
 
     var cover_options = {
-        min: constants.INDEX_MIN_LEVEL,
-        max: constants.INDEX_MAX_LEVEL,
-        max_cells: constants.MAX_INDEX_CELLS,
+        min: opts.index_min_level,
+        max: opts.index_max_level,
+        max_cells: opts.max_index_cells,
         type: 'multipolygon'
     };
 
@@ -200,4 +196,56 @@ function multipolygonGeoJSON(geometry) {
         type: 'FeatureCollection',
         features: features
     }
+}
+
+function setOptions(opts){
+    if(!opts){
+        opts = {}
+    }
+
+    // the maximum number of S2 cells used for any query coverage.
+    // - More = more complex queries
+    // - Fewer = less accurate queries
+    if(!opts.max_query_cells){
+        opts.max_query_cells = 100
+    }
+
+    // The largest size of a cell permissable in a query.
+    if(!opts.query_min_level){
+        opts.query_min_level = 1;
+    }
+
+    // The smallest size of a cell permissable in a query.
+    // - This must be >= index_max_level
+    if(!opts.query_max_level){
+        opts.query_max_level = 8;
+    }
+
+    // the maximum number of S2 cells used for any index coverage.
+    // - More = more accurate indexes
+    // - Fewer = more compact queries
+    if(!opts.max_index_cells){
+        opts.max_index_cells = 100;
+    }
+
+    // The largest size of a cell permissable in an index.
+    // - This must be <= query_min_level
+    if(!opts.index_min_level){
+        opts.index_min_level = 8;
+    }
+
+    // The smallest size of a cell permissable in an index.
+    if(!opts.index_max_level){
+        opts.index_max_level = 12;
+    }
+
+    // The index level for point features only.
+    if(!opts.index_point_level){
+        opts.index_point_level = 15;
+    }
+
+    if(!(opts.query_max_level >= opts.index_min_level)){
+        throw new Error('query level and index level must correspond');
+    }
+    return opts;
 }
