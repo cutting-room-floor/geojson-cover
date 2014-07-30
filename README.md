@@ -13,7 +13,7 @@ geojsonCover.geometryIndexes(geojson); // -> cells
 geojsonCover.geometryGeoJSON(geojson); // -> geojson
 
 // options
-geojsonCover.bboxQueryIndexes(bbox, {max_index_cells: 50}); // -> cells
+geojsonCover.bboxQueryIndexes(bbox, {max_index_cells: 50}); 
 ```
 
 ###options
