@@ -8,7 +8,7 @@ test('constants', function(t) {
 });
 
 test('point', function(t) {
-	var pt = {
+    var pt = {
       "type": "Feature",
       "properties": {},
       "geometry": {
@@ -20,14 +20,14 @@ test('point', function(t) {
       }
     };
 
-  t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
-	t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
-	t.ok(geojsonCover.geometryIndexes(pt).length, 'point geometry');
-	t.end();
+    t.ok(geojsonCover.bboxQueryIndexes(pt), 'point indexes'); // -> cells
+    t.ok(geojsonCover.bboxCellGeoJSON(pt), 'point geojson'); // -> geojson
+    t.ok(geojsonCover.geometryIndexes(pt).length, 'point geometry');
+    t.end();
 });
 /*
 test('linestring', function(t) {
-	var line = {
+    var line = {
       "type": "Feature",
       "properties": {},
       "geometry": {
@@ -54,10 +54,10 @@ test('linestring', function(t) {
     };
 
     t.ok(geojsonCover.bboxQueryIndexes(line), 'linestring indexes'); // -> cells
-	t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
-	t.ok(geojsonCover.geometryIndexes(line).length, 'linestring geometry');
-	require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(line)));
-	t.end();
+    t.ok(geojsonCover.bboxCellGeoJSON(line), 'linestring geojson'); // -> geojson
+    t.ok(geojsonCover.geometryIndexes(line).length, 'linestring geometry');
+    require('fs').writeFileSync('scratch.geojson',JSON.stringify(geojsonCover.geometryGeoJSON(line)));
+    t.end();
 });*/
 
 test('polygon', function(t) {
@@ -88,22 +88,22 @@ test('polygon', function(t) {
         ]
       }
     };
-
-	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes'); // -> cells
-	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
-	t.ok(geojsonCover.geometryIndexes(poly).length, 'polygon geometry'); 
-	t.ok(geojsonCover.geometryGeoJSON(poly), 'polygon geojson');
-	t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
-	t.end();
+    t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon indexes ranges'); // -> cells
+    t.ok(geojsonCover.bboxQueryIndexes(poly, false), 'polygon indexes cells'); // -> cells
+    t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon geojson'); // -> geojson
+    t.ok(geojsonCover.geometryIndexes(poly).length, 'polygon geometry');
+    t.ok(geojsonCover.geometryGeoJSON(poly), 'polygon geojson');
+    t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
+    t.end();
 });
 
 test('polygon with hole', function(t) {
-	var poly = {
+    var poly = {
       "type": "Feature",
       "properties": {},
       "geometry": {
         "type": "Polygon",
-        "coordinates": [ 
+        "coordinates": [
           [    // outer ring
             [
               -49.295654296875,
@@ -152,31 +152,32 @@ test('polygon with hole', function(t) {
       }
     };
 
-	t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon w/ hole indexes'); // -> cells
-	t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon w/ hole geojson'); // -> geojson
-	t.ok(geojsonCover.geometryIndexes(poly).length, 'polygon w/ hole indexes'); 
-	t.ok(geojsonCover.geometryGeoJSON(poly), 'polygon w/ hole geojson');
-	t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
-	t.end();
+    t.ok(geojsonCover.bboxQueryIndexes(poly), 'polygon w/ hole indexes'); // -> cells
+    t.ok(geojsonCover.bboxCellGeoJSON(poly), 'polygon w/ hole geojson'); // -> geojson
+    t.ok(geojsonCover.geometryIndexes(poly).length, 'polygon w/ hole indexes');
+    t.ok(geojsonCover.geometryGeoJSON(poly), 'polygon w/ hole geojson');
+    t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
+    t.end();
 });
 
 test('multipolygon', function(t) {
-  var poly = {
-      "type": "Feature",
-      "properties": {},
-      "geometry": { "type": "MultiPolygon",
-    "coordinates": [
-      [[[102.0, 2.0], [103.0, 2.0], [103.0, 3.0], [102.0, 3.0], [102.0, 2.0]]],
-      [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]],
-       [[100.2, 0.2], [100.8, 0.2], [100.8, 0.8], [100.2, 0.8], [100.2, 0.2]]]
-      ]
-    }
-  };
+    var poly = {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+            "type": "MultiPolygon",
+            "coordinates": [
+                [[[102.0, 2.0], [103.0, 2.0], [103.0, 3.0], [102.0, 3.0], [102.0, 2.0]]],
+                [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]],
+                [[100.2, 0.2], [100.8, 0.2], [100.8, 0.8], [100.2, 0.8], [100.2, 0.2]]]
+            ]
+        }
+    };
 
-  t.ok(geojsonCover.bboxQueryIndexes(poly), 'multipolygon indexes'); // -> cells
-  t.ok(geojsonCover.bboxCellGeoJSON(poly), 'multipolygon geojson'); // -> geojson
-  t.ok(geojsonCover.geometryIndexes(poly).length, 'multipolygon geometry'); 
-  t.ok(geojsonCover.geometryGeoJSON(poly), 'multipolygon geojson');
-  t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
-  t.end();
+    t.ok(geojsonCover.bboxQueryIndexes(poly), 'multipolygon indexes'); // -> cells
+    t.ok(geojsonCover.bboxCellGeoJSON(poly), 'multipolygon geojson'); // -> geojson
+    t.ok(geojsonCover.geometryIndexes(poly).length, 'multipolygon geometry');
+    t.ok(geojsonCover.geometryGeoJSON(poly), 'multipolygon geojson');
+    t.equal(geojsonCover.geometryGeoJSON(poly).features[0].geometry.type, 'Polygon')
+    t.end();
 });
