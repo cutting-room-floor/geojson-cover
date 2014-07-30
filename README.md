@@ -9,20 +9,21 @@ generates an s2 cover from geojson
 ```js
 geojsonCover.bboxQueryIndexes(bbox); // -> cells
 geojsonCover.bboxCellGeoJSON(bbox); // -> geojson
-geojsonCover.geometryIndexes(input); // -> cells
-geojsonCover.geometryGeoJSON(input); // -> geojson
+geojsonCover.geometryIndexes(geojson); // -> cells
+geojsonCover.geometryGeoJSON(geojson); // -> geojson
+
+// options
+geojsonCover.bboxQueryIndexes(bbox, {max_index_cells: 50}); // -> cells
 ```
 
 ###options
 
-```js
-{
-	max_query_cells: 100,
-	query_min_level: 1,
-	query_max_level: 8,
-	max_index_cells: 100,
-	index_min_level: 8,
-	index_max_level: 12,
-	index_point_level: 15
-}
-```
+name|default|description
+---|---|---
+max_query_cells | 100 | the maximum number of S2 cells used for any query coverage.
+query_min_level | 1 | The largest size of a cell permissable in a query.
+query_max_level | 8 | The smallest size of a cell permissable in a query.
+max_index_cells | 100 | the maximum number of S2 cells used for any index coverage.
+index_min_level | 8 | The largest size of a cell permissable in an index.
+index_max_level | 12 | The smallest size of a cell permissable in an index.
+index_point_level | 15 | The index level for point features only.
