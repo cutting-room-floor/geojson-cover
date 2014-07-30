@@ -25,7 +25,8 @@
   "dependencies": {
     "geojson-extent": "^0.2.0",
     "geojson-normalize": "0.0.0",
-    "s2": "^0.3.8"
+    "s2": "^0.3.8",
+    "turf-bbox-polygon": "^0.1.5"
   },
   "devDependencies": {
     "tape": "^2.13.4"
