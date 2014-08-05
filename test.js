@@ -3,7 +3,7 @@ var test = require('tape'),
     fs = require('fs'),
     queue = require('queue-async')
     geojsonCover = require('./');
-/*
+
 test('bbox', function(t){
   var bbox = [0,0,1,1];
 
@@ -198,12 +198,13 @@ test('World', function(t) {
     if(err) t.fail(err)
     t.end()
   })
-});*/
+});
 
 test('line', function(t){
   var line = JSON.parse(fs.readFileSync('./line.geojson'));
   
-  //t.ok(geojsonCover.geometryIndexes(line).features.length, 'LineString Geojson');
-  t.ok(geojsonCover.geometryGeoJSON(line).features.length, 'LineString Geojson');
+  t.ok(geojsonCover.geometryIndexes(line).length, 'LineString indexes');
+  t.ok(geojsonCover.geometryGeoJSON(line).features.length, 'LineString geojson');
+  t.equal(geojsonCover.geometryGeoJSON(line).features[0].geometry.type, 'Polygon');
   t.end()
 });

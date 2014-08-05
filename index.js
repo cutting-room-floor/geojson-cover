@@ -52,6 +52,8 @@ module.exports.geometryIndexes = function(input, opts) {
     switch (geom.type) {
         case 'Point':
             return pointIndex(geom.coordinates, opts);
+        case 'LineString':
+            return linestringIndex(geom, opts);
         case 'Polygon':
             return polygonIndex(geom, opts);
         case 'MultiPolygon':
@@ -85,8 +87,31 @@ function pointIndex(coords, opts) {
     return [id.parent(opts.index_point_level).toToken()];
 }
 
-function lineIndex(coords, opts) {
-    return polygonIndex(geojsonExtent.polygon(geometry));
+function linestringIndex(geometry, opts) {
+    var feature = {
+        type:'Feature',
+        geometry: geometry
+    }
+    geometry = buffer(feature, .00001, 'miles').features[0].geometry;
+    var rings = geometry.coordinates;
+
+    var cover_options = {
+        min: opts.index_min_level,
+        max: opts.index_max_level,
+        max_cells: opts.max_index_cells,
+        type: 'polygon'
+    };
+
+    var llRings = rings.map(function(ring){
+        return ring.map(function(c){
+            var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
+            return latLng.toPoint();
+        }).slice(1);
+    });
+
+    return s2.getCover(llRings, cover_options).map(function(cell) {
+        return cell.id().toToken();
+    });
 }
 
 function polygonIndex(geometry, opts) {
