@@ -181,7 +181,7 @@ test('Antarctica', function(t) {
 });
 
 test('World', function(t) {
-  var world = JSON.parse(fs.readFileSync(__dirname + '/world.geojson'));
+  var world = JSON.parse(fs.readFileSync(__dirname + '/fixtures/world.geojson'));
 
   var q = queue(1);
 
@@ -201,7 +201,7 @@ test('World', function(t) {
 });
 
 test('line', function(t){
-  var line = JSON.parse(fs.readFileSync('./line.geojson'));
+  var line = JSON.parse(fs.readFileSync(__dirname + '/fixtures/line.geojson'));
   
   t.ok(geojsonCover.geometryIndexes(line).length, 'LineString indexes');
   t.ok(geojsonCover.geometryGeoJSON(line).features.length, 'LineString geojson');
