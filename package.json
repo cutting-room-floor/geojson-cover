@@ -23,12 +23,13 @@
   },
   "homepage": "https://github.com/mapbox/geojson-cover",
   "dependencies": {
-    "geojson-extent": "^0.2.0",
+    "geojson-extent": "^0.3.0",
     "geojson-normalize": "0.0.0",
-    "s2": "^0.3.8"
+    "s2": "^0.3.8",
+    "turf-buffer": "^0.1.0"
   },
   "devDependencies": {
     "queue-async": "^1.0.7",
-    "tape": "^2.13.4"
+    "tape": "^2.14.0"
   }
 }

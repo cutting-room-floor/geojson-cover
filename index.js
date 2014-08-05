@@ -1,5 +1,6 @@
 var s2 = require('s2'),
     normalize = require('geojson-normalize'),
+    buffer = require('turf-buffer'),
     geojsonExtent = require('geojson-extent');
 
 var serialization = 'toToken';
@@ -66,6 +67,8 @@ module.exports.geometryGeoJSON = function(input, opts) {
     switch (geom.type) {
         case 'Point':
             return pointGeoJSON(geom.coordinates, opts);
+        case 'LineString':
+            return linestringGeoJSON(geom, opts);
         case 'Polygon':
             return polygonGeoJSON(geom, opts);
         case 'MultiPolygon':
@@ -133,6 +136,42 @@ function multipolygonIndex(geometry, opts) {
 }
 
 // GeometryGeoJSON
+
+function linestringGeoJSON(geometry, opts) {
+    var feature = {
+        type:'Feature',
+        geometry: geometry
+    }
+    geometry = buffer(feature, .00001, 'miles').features[0].geometry;
+    var rings = geometry.coordinates;
+
+    var cover_options = {
+        min: opts.index_min_level,
+        max: opts.index_max_level,
+        max_cells: opts.max_index_cells,
+        type: 'polygon'
+    };
+
+    var llRings = rings.map(function(ring){
+        return ring.map(function(c){
+            var latLng = (new s2.S2LatLng(c[1], c[0])).normalized();
+            return latLng.toPoint();
+        }).slice(1);
+    });
+    var features = s2.getCover(llRings, cover_options).map(function(cell,i) {
+        var geojson = cell.toGeoJSON();
+        return {
+            type: 'Feature',
+            geometry: geojson,
+            properties: {}
+        };
+    });
+
+    return {
+        type: 'FeatureCollection',
+        features: features
+    }
+}
 
 function polygonGeoJSON(geometry, opts) {
     var rings = geometry.coordinates;
