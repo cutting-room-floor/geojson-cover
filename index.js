@@ -7,7 +7,6 @@ var serialization = 'toToken';
 
 module.exports.bboxQueryIndexes = function(bbox, range, opts) {
     opts = setOptions(opts);
-    if (range === undefined) range = true;
     var latLngRect = new s2.S2LatLngRect(
         new s2.S2LatLng(bbox[1], bbox[0]),
         new s2.S2LatLng(bbox[3], bbox[2]));
@@ -18,16 +17,31 @@ module.exports.bboxQueryIndexes = function(bbox, range, opts) {
         max_cells: opts.max_index_cells
     };
 
-    return s2.getCover(latLngRect, cover_options).map(function(cell) {
-        if (range) {
-            return [
-                cell.id().rangeMin().toToken(),
-                cell.id().rangeMax().toToken()
-            ];
-        } else {
-            return cell.id().toToken();
-        }
-    });
+    var ret = {
+        range:[],
+        parents:[]
+    };
+    console.log(cover_options, bbox)
+    var cells = s2.getCover(latLngRect, cover_options)
+
+    console.log('query cells', cells, cells.length);
+    //if(cells.length > 1) throw Error('too many cells');
+
+    ret.range = [
+        cells[0].id().rangeMin().toToken(),
+        cells[0].id().rangeMax().toToken()
+        ];
+    ret.token = cells[0].id().toToken();
+    var level = cells[0].id().level();
+    var cell = cells[0].id();
+    console.log('starting level', level);
+    while(level >= 0) {
+        cell = cell.parent();
+        ret.parents.push(cell.toToken());
+        level = cell.level();
+    }
+    //console.log('ret', ret)
+    return ret;
 };
 
 module.exports.bboxCellGeoJSON = function(bbox, opts) {
